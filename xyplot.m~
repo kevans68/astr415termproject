@@ -1,0 +1,13 @@
+xy = dlmread('xy.dat');
+figure()
+plot(xy(1:500,1),xy(1:500,3),'.')
+hold on
+plot(xy(1:500,1),xy(1:500,3),'.')
+
+
+% hold off
+% 
+% figure()
+% scatter3(xy(:,1),xy(:,3),xy(:,5))
+% 
+
