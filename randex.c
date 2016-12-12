@@ -78,8 +78,8 @@ FILE* xy_f = fopen(xy, "w");
 	G1[1] = .4;
 	G1[2] = 0;
 	shift = vector(1,2); 
-	shift[1] = 1; 
-	shift[2] = 0;
+	shift[1] = -1; 
+	shift[2] = 1;
 	
 	
  for(j=1;j<=2;j++)
@@ -102,13 +102,16 @@ FILE* xy_f = fopen(xy, "w");
 		{
 			float rcalc = pow(x,2) +pow(y,2);
 			//float area = rcalc*M_PI;
-		
+			
+			float xshift = x+shift[j];
+			float yshift = y+shift[j];
 			float z = G1[j]*x;
 		
 			float vx = 0;
 			float vz = 0 ;
 			float vy = sqrtf(p_r*A/rcalc);
-			fprintf(xy_f,"%f %f %f %f %f %f \n",x,vx,y,vy,z,vz);
+			//fprintf(xy_f,"%f %f %f %f %f %f \n",x,vx,y,vy,z,vz);
+			fprintf(xy_f,"%f %f %f %f %f %f \n",xshift,vx,yshift,vy,z,vz);
 			
 			
 			c =c+1;
