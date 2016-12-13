@@ -109,18 +109,22 @@ FILE* xy_f = fopen(xy, "w");
 		{
 			//float rcalc = pow(x,2) +pow(y,2);
 			//float area = rcalc*M_PI;
+
 			x = x*27;
 			y=y*27;
+			float rcalc = sqrtf(pow(x,2) +pow(y,2));
+
 			float xshift = (x+27*shift[j]);
 			float yshift = (y+27*shift[j]);
-			float z = 27*(G1[j]*x);
+			float z = (G1[j]*x);
 			
-			float vx = 0;
+			float v = shift[j]*sqrtf(p_r*A/rcalc);
+			float vy =(v*yshift)/rcalc;
+			float vx = (v*yshift)/rcalc;
 			float vz = 0 ;
-			//float rcalc = sqrtf(pow(x,2) +pow(y,2));
 
-			//float vy = shift[j]*sqrtf(p_r*A/rcalc);
-			float vy = 3.7*sign[j];
+			
+			//float vy = 3.7*sign[j];
 			//printf("%f\n", rcalc); 
 			//fprintf(xy_f,"%f %f %f %f %f %f \n",x,vx,y,vy,z,vz);
 			fprintf(xy_f,"%f %f %f %f %f %f \n",xshift,vx,yshift,vy,z,vz);
