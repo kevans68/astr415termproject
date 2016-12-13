@@ -67,19 +67,26 @@ FILE* xy_f = fopen(xy, "w");
  int j;
 
 // radius of circle
-	float r =1; 
+	float r =1;
+// radius of Andromeda 
+//float r = 27; 
 	
 // define density
 	float A = M_PI*pow(r,2);
 	float p_r = exp(-r);
 	float * G1;
 	float * shift; 
+	float * sign;
+	sign = vector(1,2);
 	G1 = vector(1,2); 
 	G1[1] = .4;
 	G1[2] = 0;
 	shift = vector(1,2); 
 	shift[1] = -1; 
 	shift[2] = 1;
+	sign[1]= -1; 
+	sign[2] = 1; 
+	
 	
 	
  for(j=1;j<=2;j++)
@@ -100,16 +107,21 @@ FILE* xy_f = fopen(xy, "w");
 		// and add to file initial conditions file. 
 		if(bound<=r) 
 		{
-			float rcalc = pow(x,2) +pow(y,2);
+			//float rcalc = pow(x,2) +pow(y,2);
 			//float area = rcalc*M_PI;
+			x = x*27;
+			y=y*27;
+			float xshift = (x+27*shift[j]);
+			float yshift = (y+27*shift[j]);
+			float z = 27*(G1[j]*x);
 			
-			float xshift = x+shift[j];
-			float yshift = y+shift[j];
-			float z = G1[j]*x;
-		
 			float vx = 0;
 			float vz = 0 ;
-			float vy = sqrtf(p_r*A/rcalc);
+			//float rcalc = sqrtf(pow(x,2) +pow(y,2));
+
+			//float vy = shift[j]*sqrtf(p_r*A/rcalc);
+			float vy = 3.7*sign[j];
+			//printf("%f\n", rcalc); 
 			//fprintf(xy_f,"%f %f %f %f %f %f \n",x,vx,y,vy,z,vz);
 			fprintf(xy_f,"%f %f %f %f %f %f \n",xshift,vx,yshift,vy,z,vz);
 			

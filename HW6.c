@@ -5,9 +5,9 @@
 #include "nr.h"
 #include "hw5.h" 
 
-#define FREQ 	20 
+#define FREQ 	100
 #define E 0 
-#define STEPS 1000
+#define STEPS 10000
 
 int N = 0;
 float *m;
@@ -94,9 +94,9 @@ void derivs(float t, float y[], float dydx[])
 
 int main(int argc,char *argv[])
 {
-  if (argc != 5)
+  if (argc != 4)
   {
-    printf("Usage: %s <inputfile> <timestep> <Number of particles> <P> \n",argv[0]);
+    printf("Usage: %s <inputfile> <timestep> <Number of particles>  \n",argv[0]);
     return 1;
   }
 
@@ -110,9 +110,10 @@ int main(int argc,char *argv[])
 
   float h = atof(argv[2]); 
   N = atof(argv[3]);
-  float P = atof(argv[4]);
-  
-  float P100 = (P *100)/h;
+  //float P = atof(argv[4]);
+  //float P = pow(10,10);
+  //float P100 = (P)/h;
+  float P100 =3.7/h;
   
   float * y; 
   y = vector(1,N*6);
@@ -147,8 +148,9 @@ char lf_filename[20];
   float t=0;
   //define vector dydx with N*6 elements 
     float * dydx = vector(1,N*6);
+    int i = 0;
   // loop over particles starting with 1 STEPS times
-  for(int i=1;i<=P100*2; i++)
+  for(int i=1;i<=P100; i++)
 	//for(int i=1;i<=P100; i++)
   {
     
@@ -161,10 +163,13 @@ char lf_filename[20];
 
     //  parrayf(y,N*6);
 
-    //print data to file: t,x1, vx1, y1, vy1, z2, vz1,x2, vx2, y2, vy2, z2, vz2
-    fprintf(rk4_f, "%f %f %f %f %f %f %f %f %f %f %f %f %f \n",t,y[1],y[2],
-        y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12]);
-
+	if(i % FREQ == 0)
+	{
+		//printf("%d \n",i);
+    	//print data to file: t,x1, vx1, y1, vy1, z2, vz1,x2, vx2, y2, vy2, z2, vz2
+    	fprintf(rk4_f, "%f %f %f %f %f %f %f %f %f %f %f %f %f \n",t,y[1],y[2],
+        		y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12]);
+	}
     t = t+h;
   }
 
@@ -198,9 +203,9 @@ char lf_filename[20];
   // Leapfrog 
   //start t from 0
 	t=0;
-	
+	i = 0;
   // loop over particles starting with 1 STEPS times
-  for(int i=1;i<=P100*2; i++)
+  for(int i=1;i<=P100; i++)
   {
 
     //define derivatives given the initial conditions
@@ -210,11 +215,13 @@ char lf_filename[20];
 leapfrog(y, dydx, N*6, t, h, y, derivs);
   //  parrayf(y,N*6);
     
-    //print data to file: t,x1, vx1, y1, vy1, z2, vz1,x2, vx2, y2, vy2, z2, vz2
-   	fprintf(lf_f, "%f %f %f %f %f %f %f %f %f %f %f %f %f \n",t,y[1],y[2],
+    if(i % FREQ)
+    {
+    	//printf("%d \n", i);
+    	//print data to file: t,x1, vx1, y1, vy1, z2, vz1,x2, vx2, y2, vy2, z2, vz2
+   		fprintf(lf_f, "%f %f %f %f %f %f %f %f %f %f %f %f %f \n",t,y[1],y[2],
    				 y[3],y[4],y[5],y[6],y[7],y[8],y[9],y[10],y[11],y[12]);
-
-			
+	}			
     t = t+h;
   }
   
