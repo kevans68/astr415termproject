@@ -8,8 +8,11 @@
 #define iter 1
 #define M 100
 #define freq 2
-#define h 0.36
+//#define h 0.36
+//#define h 0.65
+#define h 0.65
 #define P 7.29
+#define E .4225
 
 void fun(double t,double yf[],double f[]) {
 	double xij,yij,zij,rij3,axij,ayij,azij,rij;
@@ -37,9 +40,9 @@ void fun(double t,double yf[],double f[]) {
 			yij=yf[3+(i-1)*6]-yf[3+(j-1)*6];
 			zij=yf[5+(i-1)*6]-yf[5+(j-1)*6];
 			rij=sqrt((xij*xij)+(yij*yij)+(zij*zij));
-			axij=-1.0*M*xij/pow(rij,3);
-			ayij=-1.0*M*yij/pow(rij,3);
-			azij=-1.0*M*zij/pow(rij,3);
+			axij=-1.0*M*xij/pow((pow(rij,2)+pow(E,2)),3/2);
+			ayij=-1.0*M*yij/pow((pow(rij,2)+pow(E,2)),3/2);
+			azij=-1.0*M*zij/pow((pow(rij,2)+pow(E,2)),3/2);
 	
 			f[2+(i-1)*6]+=axij;
         		f[4+(i-1)*6]+=ayij;
@@ -58,7 +61,7 @@ int main(int argc, char *argv[]) {
 	galaxy_lf=fopen("galaxy_lf.dat","w");
 	double *yf,*f;
 	double x,y,z,vx,vy,vz;
-	double t,T,r,E;
+	double t,T,r;//E;
 	double xij,yij,zij,vxij,vyij,vzij,integrator,vdotr,v;
 	int n,i,j,a;
 	n=6*N;
@@ -68,7 +71,7 @@ int main(int argc, char *argv[]) {
 /* Initialize other variables */
         t=0.0;
 	T=P*iter;
-	E=0.0;
+	//E=0.0;
 	a=0;
 	integrator=atoi(argv[1]);
 /* This first for loop is used to pre-allocate the positions and

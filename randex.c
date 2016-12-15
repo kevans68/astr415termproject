@@ -10,48 +10,11 @@
 // #define OS1 1 
 // #define OS2 -1
 
-float randR(float min, float max)
+double randR(double min, double max)
 {
-  return min + (float) (rand() / (float) (RAND_MAX) * (max - min));
+  return min + (double) (rand() / (double) (RAND_MAX) * (max - min));
 }
 
-
-/* 
-float Galaxy(float G1,float shift, float r)
-{
-	 while(c<=499)
-	 {
-		// create exponential distribution of random points x and y 
-		float u = randR(-1*SCALE,1*SCALE);
-		float v = randR(-1*SCALE,1*SCALE);
-		float x = sqrtf(-2*log(u))-shift;
-		float y = sqrtf(-2*log(v))-shift;
-	
-		//calculate the area
-		//float bound = (M_PI*pow(r,2))*SCALE;
-		float bound = pow(x,2) + pow(y,2);
-	
-		// if the point is within the area of the circle the get other initial conditions 
-		// and add to file initial conditions file. 
-		if(bound<=r) 
-		{
-			float rcalc = pow(x,2) +pow(y,2);
-			//float area = rcalc*M_PI;
-		
-			float z = G1*x;
-		
-			float vx = 0;
-			float vz = 0 ;
-			float vy = sqrtf(p_r*A/rcalc);
-			fprintf(xy_f,"%f %f %f %f %f %f \n",x,vx,y,vy,z,vz);
-			
-			
-			c =c+1;
-	
-		}
-	  }
-}
- */
 
 int main() 
 {
@@ -60,30 +23,31 @@ int main()
  sprintf(xy,"xy.dat");
 
 FILE* xy_f = fopen(xy, "w");
- float i;
+ double i;
  
  // cacluate 500 points within the circle of radius r
- float c=0;
+ double c=0;
  int j;
 
 // radius of circle
-	float r =1;
+	double r =1;
 // radius of Andromeda 
-//float r = 27; 
+//double r = 27; 
 	
 // define density
-	float A = M_PI*pow(r,2);
-	float p_r = exp(-r);
-	float * G1;
-	float * shift; 
-	float * sign;
-	sign = vector(1,2);
-	G1 = vector(1,2); 
-	G1[1] = .4;
+	double A = M_PI*pow(r,2);
+	double p_r = exp(-r);
+	double * G1;
+	double * shift; 
+	double * sign;
+	sign = dvector(1,2);
+	G1 = dvector(1,2); 
+	//G1[1] = .4;
+	G1[1] =0;
 	G1[2] = 0;
-	shift = vector(1,2); 
-	shift[1] = -1; 
-	shift[2] = 1;
+	shift = dvector(1,2); 
+	shift[1] = -20; 
+	shift[2] = 20;
 	sign[1]= -1; 
 	sign[2] = 1; 
 	
@@ -94,40 +58,50 @@ FILE* xy_f = fopen(xy, "w");
 	 while(c<=499)
 	 {
 		// create exponential distribution of random points x and y 
-		float u = randR(-1*SCALE,1*SCALE);
-		float v = randR(-1*SCALE,1*SCALE);
-		float x = sqrtf(-2*log(u))-1;
-		float y = sqrtf(-2*log(v))-1;
+		double u = randR(-1*SCALE,1*SCALE);
+		double v = randR(-1*SCALE,1*SCALE);
+		double x = sqrt(-2*log(u))-1;
+		double y = sqrt(-2*log(v))-1;
 	
 		//calculate the area
-		//float bound = (M_PI*pow(r,2))*SCALE;
-		float bound = pow(x,2) + pow(y,2);
+		//double bound = (M_PI*pow(r,2))*SCALE;
+		double bound = pow(x,2) + pow(y,2);
 	
 		// if the point is within the area of the circle the get other initial conditions 
 		// and add to file initial conditions file. 
 		if(bound<=r) 
 		{
-			//float rcalc = pow(x,2) +pow(y,2);
-			//float area = rcalc*M_PI;
+			//double rcalc = pow(x,2) +pow(y,2);
+			//double area = rcalc*M_PI;
 
 			x = x*27;
 			y=y*27;
-			float rcalc = sqrtf(pow(x,2) +pow(y,2));
+			double r = sqrt(pow(x,2) +pow(y,2));
 
-			float xshift = (x+27*shift[j]);
-			float yshift = (y+27*shift[j]);
-			float z = (G1[j]*x);
+			double xshift = (x+shift[j]);
+			double yshift = (y+shift[j]);
+			double z = (G1[j]*x);
 			
-			float v = shift[j]*sqrtf(p_r*A/rcalc);
-			float vy =(v*yshift)/rcalc;
-			float vx = (v*yshift)/rcalc;
-			float vz = 0 ;
+			double v = sign[j]*sqrtf(p_r*A/r);
+			double vy =(v*yshift)/r;
+			double vx = (v*yshift)/r;
+			double vz; 
+			
+			if(G1[j] != 0)
+			{
+			double vz = 5/2 *vx ;
+			}
+				else 
+				{
+					double vz = 0;
+				}
 
 			
-			//float vy = 3.7*sign[j];
-			//printf("%f\n", rcalc); 
-			//fprintf(xy_f,"%f %f %f %f %f %f \n",x,vx,y,vy,z,vz);
-			fprintf(xy_f,"%f %f %f %f %f %f \n",xshift,vx,yshift,vy,z,vz);
+			//double vy = 3.7*sign[j];
+			//printf("%lf\n", rcalc); 
+			//fprintf(xy_f,"%lf %lf %lf %lf %lf %lf \n",x,vx,y,vy,z,vz);
+			//fprintf(xy_f,"%lf %lf %lf %lf %lf %lf \n",xshift,vx,yshift,vy,z,vz);
+			fprintf(xy_f,"%lf %lf %lf %lf %lf %lf \n",xshift,yshift,z,vx,vy,vz);
 			
 			
 			c =c+1;
